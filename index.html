@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script src="./jquery.js"></script>
+<script>
+    /**
+     * @param 参数对象
+     *  param = {
+     *              url:'地址参数',
+     *              type:'请求类型 默认post',
+     *              contentType:'数据类型，默认json',
+     *              data:'数据',
+     *              succFn:'成功回调',
+     *              errFn:'失败回调'
+     *          }
+    */
+    jQuery.myAjax = function (param) {
+        var config = {
+            'url': param.url,
+            'type': param.type ? param.type : 'post',
+            'contentType': param.contentType ? param.contentType : 'json',
+            'data': param.data,
+            'succFn': param.succFn,
+            'errFn':param.errFn?param.errFn:function initErrFn() {console.log('我是默认的失败回调')},
+        };
+        $.ajax({
+            url: config.url,
+            type: config.type,
+            contentType: config.contentType,
+            data: config.data,
+            success: function (res) {
+                if (res.status == 1) {
+                    if (config.succFn != undefined && typeof (config.succFn) == 'function') {
+                        config.succFn();
+                    }
+                } else if (res.status == 2) {
+                    console.log('返回首页');
+                } else {
+                    console.log(res.msg);
+                }
+            },
+            error: function () {
+                if (config.errFn != undefined && typeof (config.errFn) == 'function') {
+                    config.errFn();
+                }
+            }
+        })
+    }
+
+
+    $.myAjax({
+        url:'',
+        type:'',
+        contentType:'',
+        data:{},
+        // succFn:fn1,
+        // errFn:fn2
+    })
+</script>
+
+</html>
